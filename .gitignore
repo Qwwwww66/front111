@@ -58,3 +58,8 @@ tests/
 
 # Claude Code configuration
 CLAUDE.md
+
+# Frontend build artifacts and dependencies
+frontend/.next/
+frontend/node_modules/
+frontend/.env.local*

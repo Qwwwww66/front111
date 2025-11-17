@@ -43,6 +43,45 @@ from src.tasks.mechanism_analysis_task import MechanismAnalysisTask
 from src.tasks.synthesis_method_task import SynthesisMethodTask
 from src.tasks.operation_suggesting_task import OperationSuggestingTask
 
+
+def extract_agent_identifier(task_output):
+    """从任务输出中提取负责的智能体名称."""
+    task = getattr(task_output, "task", None)
+    if task:
+        agent = getattr(task, "agent", None)
+        if agent:
+            role = getattr(agent, "role", None)
+            if role:
+                return role
+            name = getattr(agent, "name", None)
+            if name:
+                return name
+        task_name = getattr(task, "name", None)
+        if task_name:
+            return task_name
+
+    agent = getattr(task_output, "agent", None)
+    if agent:
+        role = getattr(agent, "role", None)
+        if role:
+            return role
+        name = getattr(agent, "name", None)
+        if name:
+            return name
+    task_name = getattr(task_output, "name", None)
+    if task_name:
+        return task_name
+    return None
+
+
+def notify_progress(progress_callback, agent_identifier):
+    """调用进度回调，忽略回调中的异常."""
+    if progress_callback and agent_identifier:
+        try:
+            progress_callback(agent_identifier)
+        except Exception as callback_error:  # noqa: BLE001
+            print(f"进度回调执行失败: {callback_error}")
+
 def get_user_input():
     """获取用户自定义的材料设计需求 / Get user-defined material design requirements"""
     print("请输入您的材料设计需求: / Please enter your material design requirements:")
@@ -180,7 +219,7 @@ def check_if_iteration_needed(result):
         print(f"检查迭代需求时出错: {e}")
         return False
 
-def run_design_iteration(user_requirement, llm, iteration_count=0):
+def run_design_iteration(user_requirement, llm, iteration_count=0, progress_callback=None):
     """运行设计迭代 / Run design iteration"""
     if iteration_count >= Config.MAX_DESIGN_ITERATIONS:
         return "已达到最大迭代次数，停止迭代设计。"
@@ -188,7 +227,7 @@ def run_design_iteration(user_requirement, llm, iteration_count=0):
     print(f"开始第 {iteration_count + 1} 轮设计迭代...")
     
     # 运行预设工作流 / Run preset workflow
-    result = run_preset_workflow(user_requirement, llm)
+    result = run_preset_workflow(user_requirement, llm, progress_callback=progress_callback)
     
     # 检查是否需要迭代 / Check if iteration is needed
     if check_if_iteration_needed(result):
@@ -199,13 +238,18 @@ def run_design_iteration(user_requirement, llm, iteration_count=0):
             # 更新用户需求，加入反馈 / Update user requirements with feedback
             updated_requirement = f"{user_requirement}\n\n基于上一轮评估的改进建议：{feedback}"
             # 进行下一轮迭代 / Proceed to next iteration
-            return run_design_iteration(updated_requirement, llm, iteration_count + 1)
+            return run_design_iteration(
+                updated_requirement,
+                llm,
+                iteration_count + 1,
+                progress_callback=progress_callback
+            )
         else:
             return result
     else:
         return result
 
-def run_preset_workflow(user_requirement, llm):
+def run_preset_workflow(user_requirement, llm, progress_callback=None):
     """运行预设工作流模式 / Run preset workflow mode"""
     print("启动预设工作流模式...")
     
@@ -274,6 +318,9 @@ def run_preset_workflow(user_requirement, llm):
                 f.write("JSON输出:\n")
                 json.dump(task_output.json_dict, f, ensure_ascii=False, indent=2)
             f.write(f"\n{'='*60}\n")
+
+        agent_identifier = extract_agent_identifier(task_output)
+        notify_progress(progress_callback, agent_identifier)
     
     # 创建Crew / Create Crew
     ecomats_crew = Crew(
@@ -306,9 +353,10 @@ def run_preset_workflow(user_requirement, llm):
     
     # 执行 / Execute
     result = ecomats_crew.kickoff()
+    notify_progress(progress_callback, None)
     return result
 
-def run_autonomous_workflow(user_requirement, llm):
+def run_autonomous_workflow(user_requirement, llm, progress_callback=None):
     """运行智能体自主调度模式 / Run agent autonomous scheduling mode"""
     print("启动智能体自主调度模式...")
     
@@ -498,6 +546,9 @@ def run_autonomous_workflow(user_requirement, llm):
                 f.write("JSON输出:\n")
                 json.dump(task_output.json_dict, f, ensure_ascii=False, indent=2)
             f.write(f"\n{'='*60}\n")
+
+        agent_identifier = extract_agent_identifier(task_output)
+        notify_progress(progress_callback, agent_identifier)
     
     # 创建Crew / Create Crew
     # 只有在真正需要设计任务时才将其添加到任务列表中
@@ -519,6 +570,7 @@ def run_autonomous_workflow(user_requirement, llm):
     
     # 执行 / Execute
     result = ecomats_crew.kickoff()
+    notify_progress(progress_callback, None)
     return result
 
 def main():

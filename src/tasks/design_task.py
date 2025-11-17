@@ -135,7 +135,8 @@ class DesignTask(BaseTask):
         task = Task(
             agent=agent,
             expected_output=expected_output,
-            description=description
+            description=description,
+            name=getattr(agent, "role", None)
         )
         
         # 如果有上下文任务，添加依赖关系

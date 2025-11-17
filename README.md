@@ -18,6 +18,7 @@ This is a multi-agent system built using the CrewAI framework, specifically desi
 - Supports Alibaba Cloud EAS self-deployed model integration
 - Integrates chemical database tools to validate material designs
 - Implements triple-blind review and consistency analysis mechanisms
+- Frontend now supports bilingual UI (中文/English) with `/` (中文) and `/en` (English) pages, including LLM input dock and Agent runway in both languages.
 - Supports iterative design optimization
 - Implements 5 specialized AI tools to enhance material property querying capabilities
 
