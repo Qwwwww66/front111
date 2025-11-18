@@ -173,7 +173,7 @@ export default function WorkflowFormEn({
 
       {isCompact && (
         <div className="relative mt-4 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/70">
-          <p>Input dock is minimized to focus on the runway below.</p>
+          <p>Input dock auto-shrinks; track progress in the Agent Runway.</p>
           {onExpand && (
             <button
               type="button"
@@ -192,7 +192,7 @@ export default function WorkflowFormEn({
           onClick={onCollapse}
           className="mt-4 text-right text-xs text-white/60 underline-offset-4 hover:text-white"
         >
-          Collapse input · Focus runway
+          Collapse input
         </button>
       )}
 

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from "react";
 import clsx from "clsx";
@@ -189,7 +189,7 @@ export default function WorkflowForm({
 
       {isCompact && (
         <div className="relative mt-4 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/70">
-          <p>输入舱已缩至迷你尺寸，以便聚焦下方跑道。</p>
+          <p>输入舱已自动缩小，任务进度见 Agent Runway。</p>
           {onExpand && (
             <button
               type="button"
@@ -208,7 +208,7 @@ export default function WorkflowForm({
           onClick={onCollapse}
           className="mt-4 text-right text-xs text-white/60 underline-offset-4 hover:text-white"
         >
-          折叠输入 · 聚焦跑道
+          折叠输入
         </button>
       )}
 
@@ -225,3 +225,4 @@ export default function WorkflowForm({
     </form>
   );
 }
+

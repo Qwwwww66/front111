@@ -1,13 +1,13 @@
-﻿'use client';
+'use client';
 
 import Link from "next/link";
 import clsx from "clsx";
 import { useState } from "react";
 import type { WorkflowDetail } from "@/lib/api";
-import WorkflowFormEn from "@/components/workflow-form-en";
-import WorkflowTableEn from "@/components/workflow-table-en";
+import WorkflowForm from "@/components/workflow-form";
+import WorkflowTable from "@/components/workflow-table";
 
-export default function HomePageEn() {
+export default function HomePage() {
   const [activeWorkflowId, setActiveWorkflowId] = useState<string | null>(null);
   const [manualExpand, setManualExpand] = useState(false);
   const [clearSignal, setClearSignal] = useState(0);
@@ -28,11 +28,11 @@ export default function HomePageEn() {
   return (
     <main className="min-h-screen bg-[#02030c] text-white">
       <div className="relative overflow-hidden">
-                <Link
-          href="/zh"
+        <Link
+          href="/en"
           className="absolute right-6 top-6 z-30 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-semibold text-white backdrop-blur hover:border-white/40 hover:bg-white/20"
         >
-          中文
+          EN
         </Link>
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(39,97,255,0.25),_transparent_55%)]" />
@@ -45,23 +45,24 @@ export default function HomePageEn() {
                 Water Quality Risk Control Engineering
               </p>
               <h1 className="text-4xl font-semibold leading-tight lg:text-5xl space-y-2">
-                <span className="block">ECOMATS Workspace</span>
-                <span className="block">Multi-Agent Materials Design</span>
+                <span className="block">
+                  {"ECOMATS\u5de5\u4f5c\u53f0"}
+                </span>
+                <span className="block">
+                  {"\u6750\u6599\u8bbe\u8ba1\u591a\u667a\u80fd\u4f53"}
+                </span>
               </h1>
               <p className="text-base text-white/70 lg:text-lg">
-                Built with Qwen + CrewAi to form a multi-agent system featuring autonomous agent
-                scheduling, enabling requirements analysis, materials design, expert evaluation,
-                mechanism mining, materials synthesis, and recommendation optimization within a
-                user-friendly, data-driven agent workstation.
+                通过 Qwen + CrewAi 构建多智能体系统，具有智能体自主调度系统，实现需求分析、材料设计、专家评价、机理挖掘、材料合成与推荐优化，界面友好，数据驱动的智能体工作站。
               </p>
               <div className="flex flex-wrap gap-3 text-[13px] uppercase tracking-widest text-white/60">
                 {[
-                  "Intelligent Scheduling",
-                  "Materials Design",
-                  "Materials Evaluation",
-                  "Mechanism Mining",
-                  "Synthesis Methods",
-                  "Recommendation Optimization"
+                  "智能调度",
+                  "材料设计",
+                  "材料评价",
+                  "机理挖掘",
+                  "合成方法",
+                  "推荐优化"
                 ].map((item) => (
                   <span
                     key={item}
@@ -81,9 +82,9 @@ export default function HomePageEn() {
                 </div>
                 <div className="mt-6 space-y-4">
                   {[
-                    { label: "ECOMATS", status: "Connected", indicator: "bg-emerald-300" },
-                    { label: "Flux channel #2", status: "Disconnected", indicator: "bg-rose-400" },
-                    { label: "Flux channel #3", status: "Disconnected", indicator: "bg-rose-400" }
+                    { label: "ECOMATS", status: "\u5df2\u8fde\u63a5", indicator: "bg-emerald-300" },
+                    { label: "Flux channel #2", status: "\u672a\u8fde\u63a5", indicator: "bg-rose-400" },
+                    { label: "Flux channel #3", status: "\u672a\u8fde\u63a5", indicator: "bg-rose-400" }
                   ].map((channel) => (
                     <div
                       key={channel.label}
@@ -99,7 +100,7 @@ export default function HomePageEn() {
                 </div>
                 <div className="mt-8 flex flex-col gap-3">
                   <div className="text-xs uppercase tracking-[0.4em] text-white/40">
-                    WORKFLOW TRACKING
+                    {"WORKFLOW \u8ffd\u8e2a"}
                   </div>
                   <div className="relative h-24 overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-r from-[#6f6dff]/10 via-[#0f1c45] to-[#0b0c24] p-4">
                     <div className="absolute -left-10 -top-6 h-20 w-20 rounded-full bg-[#6b8dff]/40 blur-2xl" />
@@ -107,7 +108,7 @@ export default function HomePageEn() {
                       <span>WORKFLOW CONDITION</span>
                       <span className="flex items-center gap-2">
                         <span className="h-2 w-2 animate-ping rounded-full bg-cyan-300" />
-                        Running
+                        {"\u8fd0\u884c\u4e2d"}
                       </span>
                     </div>
                     <div className="relative mt-4 h-1.5 rounded-full bg-white/10">
@@ -120,7 +121,7 @@ export default function HomePageEn() {
           </section>
 
           <section className="flex flex-col gap-8">
-            <WorkflowFormEn
+            <WorkflowForm
               isCompact={isFormCompact}
               activeWorkflowId={activeWorkflowId}
               onExpand={() => setManualExpand(true)}
@@ -131,7 +132,7 @@ export default function HomePageEn() {
                 setManualExpand(false);
               }}
             />
-            <WorkflowTableEn
+            <WorkflowTable
               focusedWorkflowId={activeWorkflowId}
               onWorkflowIdle={handleWorkflowIdle}
             />
@@ -141,6 +142,3 @@ export default function HomePageEn() {
     </main>
   );
 }
-
-
-
