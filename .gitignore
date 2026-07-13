@@ -23,6 +23,7 @@ wheels/
 
 # Environments
 .env
+.conda/
 .venv
 venv/
 ENV/
@@ -63,3 +64,9 @@ CLAUDE.md
 frontend/.next/
 frontend/node_modules/
 frontend/.env.local*
+
+# Web API local configuration
+webapi/.env.webapi
+
+# Generated workflow results
+outputs/workflow_result_*.txt
