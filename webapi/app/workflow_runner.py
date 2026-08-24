@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import datetime as dt
+import os
 import sys
 import threading
 import uuid
@@ -127,9 +128,14 @@ class WorkflowManager:
                 raise RuntimeError("QWEN_API_KEY 缺失或无效。")
 
             dashscope.api_key = Config.QWEN_API_KEY
+            # Ensure CrewAI's native DashScope provider sees the worker config.
+            os.environ["OPENAI_API_KEY"] = Config.QWEN_API_KEY
+            os.environ["OPENAI_API_BASE"] = Config.QWEN_API_BASE
+            os.environ["DASHSCOPE_API_KEY"] = Config.QWEN_API_KEY
+            os.environ["DASHSCOPE_BASE_URL"] = Config.QWEN_API_BASE
             llm = create_llm()
 
-            self._append_log(run_id, "LLM 创建成功，开始执行 Crew。")
+            self._append_log(run_id, f"LLM 创建成功 (key={Config.QWEN_API_KEY[:10]}... model={Config.QWEN_MODEL_NAME} base={Config.QWEN_API_BASE})，开始执行 Crew。")
 
             run = self._runs[run_id]
             if run.mode == WorkflowMode.PRESET:
@@ -146,9 +152,14 @@ class WorkflowManager:
                 )
 
             result_path = self._locate_latest_output(start_time)
-            relative_path = (
-                str(result_path.relative_to(PROJECT_ROOT)) if result_path else None
-            )
+            relative_path = None
+            if result_path:
+                result_path = result_path.resolve()
+                project_root = PROJECT_ROOT.resolve()
+                try:
+                    relative_path = str(result_path.relative_to(project_root))
+                except ValueError:
+                    relative_path = f"outputs/{result_path.name}"
 
             self._append_log(run_id, "工作流执行完成。")
             self._update_run(
@@ -164,7 +175,7 @@ class WorkflowManager:
             self._update_run(run_id, current_agent=None)
 
     def _locate_latest_output(self, start_time: dt.datetime) -> Optional[Path]:
-        outputs_dir = settings.workflow_storage
+        outputs_dir = settings.workflow_storage.resolve()
         if not outputs_dir.exists():
             return None
 
@@ -176,7 +187,7 @@ class WorkflowManager:
         for path in candidates:
             modified = dt.datetime.utcfromtimestamp(path.stat().st_mtime)
             if modified >= start_time - dt.timedelta(minutes=5):
-                return path
+                return path.resolve()
         return None
 
 

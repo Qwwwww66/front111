@@ -1,0 +1,9 @@
+Asset: nju-ecomats-cover-background.png
+Source: OpenAI built-in image generation
+Use case: scientific-educational
+
+Prompt:
+Create a premium 16:9 scientific visualization for a university water-treatment innovation competition. Use a deep ocean-navy aqueous environment with clear dark negative space across the left 42 percent. Concentrate the catalyst visualization on the right 58 percent: a plausible abstract metal-oxide catalytic lattice with silver and cyan atoms, sparse warm amber active sites, elegant electron-transfer arcs, cyan and teal reaction pathways, pollutant molecules approaching and fragmenting into smaller harmless products, and a clean transparent water current flowing outward. Suggest multi-agent coordination through several thin converging data paths without UI panels. Use high-end cinematic scientific 3D rendering with controlled cyan and teal rim lighting. Do not claim a specific real crystal structure.
+
+Constraints:
+No text, letters, numbers, logos, university crest, watermark, fake chemical labels, identifiable crystal database ID, people, laboratory stock-photo look, dashboard cards, excessive purple gradient, large lens flares, or clutter.

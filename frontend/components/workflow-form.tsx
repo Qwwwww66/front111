@@ -95,70 +95,62 @@ export default function WorkflowForm({
     <form
       onSubmit={handleSubmit}
       className={clsx(
-        "relative flex w-full flex-col overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-[#11163e]/90 via-[#070a1f]/90 to-[#020308]/95 text-white shadow-[0_30px_80px_rgba(3,4,16,0.55)] transition-all duration-500",
+        "workflow-form-panel relative flex w-full flex-col overflow-hidden rounded-[10px] border text-white transition-all duration-500",
         isCompact
-          ? "scale-95 px-5 py-6 opacity-90"
-          : "px-8 py-9 sm:px-10 sm:py-12"
+          ? "px-5 py-6 opacity-90"
+          : "px-7 py-8 sm:px-10 sm:py-10"
       )}
     >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-40"
-      >
-        <div className="absolute -left-32 top-10 h-72 w-72 rounded-full bg-[#7c6cff]/30 blur-[120px]" />
-        <div className="absolute -bottom-10 right-0 h-80 w-80 rounded-full bg-[#16f1ff]/10 blur-[120px]" />
-      </div>
-
       <div className="relative flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs uppercase tracking-[0.6em] text-white/40">
+          <p className="text-[13px] uppercase tracking-normal text-cyan-100/55">
             LLM INPUT DOCK
           </p>
-          <h2 className="mt-4 text-2xl font-semibold leading-tight text-white">
+          <h2 className="mt-4 text-[30px] font-semibold leading-tight text-white">
             提交新任务
           </h2>
-          <p className="mt-2 text-sm text-white/70">
+          <p className="mt-2 text-[15px] leading-7 text-white/70">
             填写材料设计需求，选择智能体运行模式，生成优化的材料设计方案。
           </p>
         </div>
 
-        <div className="flex flex-col items-end gap-2 text-xs text-white/60">
-          <span className="rounded-full border border-white/15 px-3 py-1">
+        <div className="flex flex-col items-end gap-2 text-[13px] text-white/65">
+          <span className="rounded-md border border-cyan-100/20 bg-cyan-300/5 px-3 py-1.5">
             {mode === "preset" ? "预设流程" : "自主调度"}
           </span>
           {activeWorkflowId ? (
-            <span className="text-[11px] text-emerald-300/80">
+            <span className="text-xs text-emerald-300/80">
               运行中 · #{activeWorkflowId}
             </span>
           ) : (
-            <span className="text-[11px] text-white/40">等待点火命令</span>
+            <span className="text-xs text-white/45">等待点火命令</span>
           )}
         </div>
       </div>
 
       <div className={bodyClass}>
-        <label className="block text-sm font-medium text-white/80">
+        <label className="block text-[15px] font-medium text-white/85">
           材料设计需求
           <textarea
             value={requirement}
             onChange={(event) => setRequirement(event.target.value)}
             placeholder="例如：兼顾低温运行、抑藻、低能耗的催化材料设计要求..."
-            className="mt-3 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/90 outline-none transition placeholder:text-white/30 focus:border-[#7c6cff]/70 focus:bg-white/10"
+            className="mt-3 w-full rounded-lg border border-cyan-100/15 bg-[#071122]/85 px-4 py-4 text-[15px] leading-7 text-white/90 outline-none transition placeholder:text-white/35 focus:border-cyan-300/60 focus:bg-[#09182b]"
             rows={5}
           />
         </label>
 
         <div className="space-y-3">
-          <span className="text-sm font-medium text-white/80">运行模式</span>
+          <span className="text-[15px] font-medium text-white/85">运行模式</span>
           <div className="grid gap-3 lg:grid-cols-2">
             {modes.map((item) => (
               <label
                 key={item.value}
                 className={clsx(
-                  "relative flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-white/10 p-4 text-sm transition",
+                  "relative flex cursor-pointer flex-col overflow-hidden rounded-lg border border-white/10 p-4 text-[15px] transition",
                   mode === item.value
-                    ? "bg-gradient-to-r from-[#7c6cff]/30 to-[#16f1ff]/10 text-white shadow-[0_10px_30px_rgba(14,20,55,0.35)]"
-                    : "bg-white/5 text-white/70 hover:border-white/30"
+                    ? "border-cyan-300/35 bg-cyan-300/10 text-white shadow-[0_10px_30px_rgba(14,78,96,0.22)]"
+                    : "bg-white/[0.035] text-white/70 hover:border-cyan-100/25"
                 )}
               >
                 <input
@@ -170,7 +162,7 @@ export default function WorkflowForm({
                   className="hidden"
                 />
                 <span className="font-semibold">{item.label}</span>
-                <span className="mt-1 text-xs text-white/60">
+                <span className="mt-1 text-[13px] leading-6 text-white/60">
                   {item.description}
                 </span>
               </label>
@@ -181,7 +173,7 @@ export default function WorkflowForm({
         <button
           type="submit"
           disabled={state.type === "loading"}
-          className="group w-full rounded-2xl bg-gradient-to-r from-[#7c6cff] via-[#5b72ff] to-[#16f1ff] px-5 py-3 text-sm font-semibold text-white shadow-[0_15px_35px_rgba(25,30,65,0.55)] transition hover:shadow-[0_25px_45px_rgba(25,30,65,0.65)] disabled:cursor-not-allowed disabled:opacity-60"
+          className="group w-full rounded-lg border border-cyan-200/30 bg-gradient-to-r from-[#087f9b] via-[#0e98ad] to-[#18b993] px-5 py-3.5 text-[15px] font-semibold text-white shadow-[0_14px_32px_rgba(7,112,133,0.28)] transition hover:brightness-110 hover:shadow-[0_18px_38px_rgba(7,142,158,0.34)] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {state.type === "loading" ? "正在提交..." : "点燃多智能体"}
         </button>

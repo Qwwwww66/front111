@@ -1,6 +1,6 @@
 import logging
 import os
-from crewai import Agent
+from crewai import Agent, LLM
 from src.utils.prompt_loader import load_prompt
 from src.config.config import Config
 
@@ -11,44 +11,32 @@ logger = logging.getLogger(__name__)
 
 class BaseAgent:
     """基础智能体类，提供通用的智能体创建功能 / Base agent class that provides general agent creation functionality"""
-    
+
     def __init__(self, llm, role, goal, prompt_file, temperature=None):
         self.llm = llm
         self.role = role
         self.goal = goal
         self.prompt_file = prompt_file
         self.temperature = temperature
-    
+
     def create_agent(self):
         # 如果提供了特定温度，则使用该温度，否则使用LLM的默认温度
-        # If a specific temperature is provided, use that temperature, otherwise use the LLM's default temperature
         agent_llm = self.llm
         if self.temperature is not None:
-            # 创建一个新的LLM实例，使用指定的温度
-            # Create a new LLM instance with the specified temperature
-            # 获取原始LLM的属性
-            base_url = getattr(self.llm, 'base_url', None) or getattr(self.llm, 'openai_api_base', None)
-            api_key = getattr(self.llm, 'api_key', None) or getattr(self.llm, 'openai_api_key', None)
-            model = getattr(self.llm, 'model', None) or getattr(self.llm, 'model_name', None)
-            streaming = getattr(self.llm, 'streaming', False)
-            max_tokens = getattr(self.llm, 'max_tokens', None)
-            
-            # 根据API基础URL判断使用哪种前缀
-            if model and not model.startswith(('openai/', 'qwen/')):
-                if base_url and 'dashscope' in base_url:
-                    model = 'qwen/' + model
-                else:
-                    model = 'openai/' + model
-            
-            agent_llm = type(self.llm)(
+            # 使用 CrewAI 原生 LLM 类创建新实例
+            model = getattr(self.llm, 'model', None) or Config.QWEN_MODEL_NAME
+            base_url = getattr(self.llm, 'base_url', None) or Config.QWEN_API_BASE
+            api_key = getattr(self.llm, 'api_key', None) or Config.QWEN_API_KEY
+            max_tokens = getattr(self.llm, 'max_tokens', None) or Config.MODEL_MAX_TOKENS
+
+            agent_llm = LLM(
+                model=model,
                 base_url=base_url,
                 api_key=api_key,
-                model=model,
                 temperature=self.temperature,
-                streaming=streaming,
-                max_tokens=max_tokens
+                max_tokens=max_tokens,
             )
-        
+
         return Agent(
             role=self.role,
             goal=self.goal,

@@ -162,7 +162,7 @@ export default function WorkflowTable({
     const load = async () => {
       try {
         setLoading(true);
-        const list = await fetchWorkflows();
+        const list = await fetchWorkflows() as WorkflowDetail[];
         if (!cancelled) {
           list.forEach((item) => rememberRequirement(item));
           setWorkflows(list);
@@ -532,7 +532,7 @@ export default function WorkflowTable({
   const handleRetry = async () => {
     try {
       setLoading(true);
-      const list = await fetchWorkflows();
+      const list = await fetchWorkflows() as WorkflowDetail[];
       setWorkflows(list);
       setError(null);
       setLastSyncedAt(Date.now());

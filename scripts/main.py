@@ -17,7 +17,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from crewai import Agent, Task, Crew, Process
-from langchain_openai import ChatOpenAI
 from src.config.config import Config
 import dashscope
 

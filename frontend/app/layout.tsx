@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "ECOMATS 多智能体控制台",
-  description: "基于 CrewAI 的材料化学设计多智能体系统 Web 界面"
+  title: "水处理催化材料设计多智能体系统（NJU-ECOMATS）",
+  description: "基于 Qwen + CrewAI 的水处理催化材料智能设计与协同优化平台"
 };
 
 export default function RootLayout({

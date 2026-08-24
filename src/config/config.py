@@ -57,6 +57,7 @@ class Config:
     VERBOSE = os.getenv("VERBOSE", "True").lower() == "true"
     
     # EAS模型配置（可选） / EAS model configuration (optional)
+    EAS_ENABLED = os.getenv("EAS_ENABLED", "false").lower() == "true"
     EAS_ENDPOINT = os.getenv("EAS_ENDPOINT")
     EAS_TOKEN = os.getenv("EAS_TOKEN")
     EAS_MODEL_NAME = os.getenv("EAS_MODEL_NAME")

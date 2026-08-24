@@ -30,8 +30,11 @@ class Settings(BaseSettings):
 
     @validator("workflow_storage", pre=True)
     def _ensure_path(cls, value):  # noqa: D401
-        """将字符串转换为 Path."""
-        return Path(value)
+        """将字符串转换为绝对路径，相对于项目根目录."""
+        p = Path(value)
+        if not p.is_absolute():
+            p = PROJECT_ROOT / p
+        return p.resolve()
 
 
 settings = Settings()
